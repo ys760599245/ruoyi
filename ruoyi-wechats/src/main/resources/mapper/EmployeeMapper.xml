@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.wechats.mapper.EmployeeMapper">
+
+    <resultMap type="com.ruoyi.wechats.domain.Employee" id="EmployeeResult">
+        <result property="pkEid" column="pk_eid"/>
+        <result property="name" column="name"/>
+        <result property="fkSid" column="fk_sid"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="skill" column="skill"/>
+        <result property="mark" column="mark"/>
+        <result property="image" column="image"/>
+        <result property="createId" column="create_id"/>
+        <result property="updateId" column="update_id"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectEmployeeVo">
+        select pk_eid, name, fk_sid, status, create_time, skill, mark, image, create_id, update_id, update_time from sys_employee
+    </sql>
+
+    <select id="selectEmployeeList" parameterType="com.ruoyi.wechats.domain.Employee" resultMap="EmployeeResult">
+        <include refid="selectEmployeeVo"/>
+        <where>
+            <if test="pkEid != null ">and pk_eid = #{pkEid}</if>
+            <if test="name != null  and name != '' ">and name = #{name}</if>
+            <if test="fkSid != null ">and fk_sid = #{fkSid}</if>
+            <if test="status != null ">and status = #{status}</if>
+            <if test="createTime != null ">and create_time = #{createTime}</if>
+            <if test="skill != null  and skill != '' ">and skill = #{skill}</if>
+            <if test="mark != null  and mark != '' ">and mark = #{mark}</if>
+            <if test="image != null  and image != '' ">and image = #{image}</if>
+            <if test="createId != null ">and create_id = #{createId}</if>
+            <if test="updateId != null ">and update_id = #{updateId}</if>
+            <if test="updateTime != null ">and update_time = #{updateTime}</if>
+        </where>
+    </select>
+
+    <select id="selectEmployeeById" parameterType="Long" resultMap="EmployeeResult">
+        <include refid="selectEmployeeVo"/>
+        where pk_eid = #{pkEid}
+    </select>
+
+    <insert id="insertEmployee" parameterType="com.ruoyi.wechats.domain.Employee" useGeneratedKeys="true" keyProperty="pkEid">
+        insert into sys_employee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''  ">name,</if>
+            <if test="fkSid != null  ">fk_sid,</if>
+            <if test="status != null  ">status,</if>
+            <if test="createTime != null  ">create_time,</if>
+            <if test="skill != null  and skill != ''  ">skill,</if>
+            <if test="mark != null  and mark != ''  ">mark,</if>
+            <if test="image != null  and image != ''  ">image,</if>
+            <if test="createId != null  ">create_id,</if>
+            <if test="updateId != null  ">update_id,</if>
+            <if test="updateTime != null  ">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''  ">#{name},</if>
+            <if test="fkSid != null  ">#{fkSid},</if>
+            <if test="status != null  ">#{status},</if>
+            <if test="createTime != null  ">#{createTime},</if>
+            <if test="skill != null  and skill != ''  ">#{skill},</if>
+            <if test="mark != null  and mark != ''  ">#{mark},</if>
+            <if test="image != null  and image != ''  ">#{image},</if>
+            <if test="createId != null  ">#{createId},</if>
+            <if test="updateId != null  ">#{updateId},</if>
+            <if test="updateTime != null  ">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateEmployee" parameterType="com.ruoyi.wechats.domain.Employee">
+        update sys_employee
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''  ">name = #{name},</if>
+            <if test="fkSid != null  ">fk_sid = #{fkSid},</if>
+            <if test="status != null  ">status = #{status},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="skill != null  and skill != ''  ">skill = #{skill},</if>
+            <if test="mark != null  and mark != ''  ">mark = #{mark},</if>
+            <if test="image != null  and image != ''  ">image = #{image},</if>
+            <if test="createId != null  ">create_id = #{createId},</if>
+            <if test="updateId != null  ">update_id = #{updateId},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        where pk_eid = #{pkEid}
+    </update>
+
+    <delete id="deleteEmployeeById" parameterType="Long">
+        delete from sys_employee where pk_eid = #{pkEid}
+    </delete>
+
+    <delete id="deleteEmployeeByIds" parameterType="String">
+        delete from sys_employee where pk_eid in
+        <foreach item="pkEid" collection="array" open="(" separator="," close=")">
+            #{pkEid}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.wechats.mapper.HeadlineMapper">
+    
+    <resultMap type="com.ruoyi.wechats.domain.Headline" id="HeadlineResult">
+        <result property="lineId"    column="line_id"    />
+        <result property="lineName"    column="line_name"    />
+        <result property="lineLink"    column="line_link"    />
+        <result property="lineImg"    column="line_img"    />
+        <result property="lineCreatedata"    column="line_createdata"    />
+        <result property="linePriority"    column="line_priority"    />
+        <result property="enableStatus"    column="enable_status"    />
+        <result property="createUser"    column="create_user"    />
+    </resultMap>
+	
+	<sql id="selectHeadlineVo">
+        select line_id, line_name, line_link, line_img, line_createdata, line_priority, enable_status, create_user from sys_headline
+    </sql>
+	
+    <select id="selectHeadlineList" parameterType="com.ruoyi.wechats.domain.Headline" resultMap="HeadlineResult">
+        <include refid="selectHeadlineVo"/>
+        <where>  
+            <if test="lineId != null "> and line_id = #{lineId}</if>
+             <if test="lineName != null  and lineName != '' "> and line_name = #{lineName}</if>
+             <if test="lineLink != null  and lineLink != '' "> and line_link = #{lineLink}</if>
+             <if test="lineImg != null  and lineImg != '' "> and line_img = #{lineImg}</if>
+             <if test="lineCreatedata != null "> and line_createdata = #{lineCreatedata}</if>
+             <if test="linePriority != null "> and line_priority = #{linePriority}</if>
+             <if test="enableStatus != null "> and enable_status = #{enableStatus}</if>
+             <if test="createUser != null "> and create_user = #{createUser}</if>
+         </where>
+    </select>
+    
+    <select id="selectHeadlineById" parameterType="Integer" resultMap="HeadlineResult">
+        <include refid="selectHeadlineVo"/>
+        where line_id = #{lineId}
+    </select>
+        
+    <insert id="insertHeadline" parameterType="com.ruoyi.wechats.domain.Headline">
+        insert into sys_headline
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="lineId != null  ">line_id,</if>
+			<if test="lineName != null  and lineName != ''  ">line_name,</if>
+			<if test="lineLink != null  and lineLink != ''  ">line_link,</if>
+			<if test="lineImg != null  and lineImg != ''  ">line_img,</if>
+			<if test="lineCreatedata != null  ">line_createdata,</if>
+			<if test="linePriority != null  ">line_priority,</if>
+			<if test="enableStatus != null  ">enable_status,</if>
+			<if test="createUser != null  ">create_user,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="lineId != null  ">#{lineId},</if>
+			<if test="lineName != null  and lineName != ''  ">#{lineName},</if>
+			<if test="lineLink != null  and lineLink != ''  ">#{lineLink},</if>
+			<if test="lineImg != null  and lineImg != ''  ">#{lineImg},</if>
+			<if test="lineCreatedata != null  ">#{lineCreatedata},</if>
+			<if test="linePriority != null  ">#{linePriority},</if>
+			<if test="enableStatus != null  ">#{enableStatus},</if>
+			<if test="createUser != null  ">#{createUser},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateHeadline" parameterType="com.ruoyi.wechats.domain.Headline">
+        update sys_headline
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="lineName != null  and lineName != ''  ">line_name = #{lineName},</if>
+            <if test="lineLink != null  and lineLink != ''  ">line_link = #{lineLink},</if>
+            <if test="lineImg != null  and lineImg != ''  ">line_img = #{lineImg},</if>
+            <if test="lineCreatedata != null  ">line_createdata = #{lineCreatedata},</if>
+            <if test="linePriority != null  ">line_priority = #{linePriority},</if>
+            <if test="enableStatus != null  ">enable_status = #{enableStatus},</if>
+            <if test="createUser != null  ">create_user = #{createUser},</if>
+        </trim>
+        where line_id = #{lineId}
+    </update>
+
+	<delete id="deleteHeadlineById" parameterType="Integer">
+        delete from sys_headline where line_id = #{lineId}
+    </delete>
+	
+    <delete id="deleteHeadlineByIds" parameterType="String">
+        delete from sys_headline where line_id in 
+        <foreach item="lineId" collection="array" open="(" separator="," close=")">
+            #{lineId}
+        </foreach>
+    </delete>
+    
+</mapper>

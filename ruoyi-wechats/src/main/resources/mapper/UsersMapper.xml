@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.wechats.mapper.UsersMapper">
+
+    <resultMap type="com.ruoyi.wechats.domain.Users" id="UsersResult">
+        <result property="pkId" column="pk_id"/>
+        <result property="name" column="name"/>
+        <result property="phone" column="phone"/>
+        <result property="sex" column="sex"/>
+        <result property="address" column="address"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createId" column="create_id"/>
+        <result property="updateId" column="update_id"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectUsersVo">
+        select pk_id, name, phone, sex, address, create_time, create_id, update_id, update_time from sys_users
+    </sql>
+
+    <select id="selectUsersList" parameterType="com.ruoyi.wechats.domain.Users" resultMap="UsersResult">
+        <include refid="selectUsersVo"/>
+        <where>
+            <if test="pkId != null ">and pk_id = #{pkId}</if>
+            <if test="name != null  and name != '' ">and name = #{name}</if>
+            <if test="phone != null  and phone != '' ">and phone = #{phone}</if>
+            <if test="sex != null ">and sex = #{sex}</if>
+            <if test="address != null  and address != '' ">and address = #{address}</if>
+            <if test="createTime != null ">and create_time = #{createTime}</if>
+            <if test="createId != null ">and create_id = #{createId}</if>
+            <if test="updateId != null ">and update_id = #{updateId}</if>
+            <if test="updateTime != null ">and update_time = #{updateTime}</if>
+        </where>
+    </select>
+
+    <select id="selectUsersById" parameterType="Long" resultMap="UsersResult">
+        <include refid="selectUsersVo"/>
+        where pk_id = #{pkId}
+    </select>
+
+    <insert id="insertUsers" parameterType="com.ruoyi.wechats.domain.Users" useGeneratedKeys="true" keyProperty="pkId">
+        insert into sys_users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''  ">name,</if>
+            <if test="phone != null  and phone != ''  ">phone,</if>
+            <if test="sex != null  ">sex,</if>
+            <if test="address != null  and address != ''  ">address,</if>
+            <if test="createTime != null  ">create_time,</if>
+            <if test="createId != null  ">create_id,</if>
+            <if test="updateId != null  ">update_id,</if>
+            <if test="updateTime != null  ">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''  ">#{name},</if>
+            <if test="phone != null  and phone != ''  ">#{phone},</if>
+            <if test="sex != null  ">#{sex},</if>
+            <if test="address != null  and address != ''  ">#{address},</if>
+            <if test="createTime != null  ">#{createTime},</if>
+            <if test="createId != null  ">#{createId},</if>
+            <if test="updateId != null  ">#{updateId},</if>
+            <if test="updateTime != null  ">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateUsers" parameterType="com.ruoyi.wechats.domain.Users">
+        update sys_users
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''  ">name = #{name},</if>
+            <if test="phone != null  and phone != ''  ">phone = #{phone},</if>
+            <if test="sex != null  ">sex = #{sex},</if>
+            <if test="address != null  and address != ''  ">address = #{address},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="createId != null  ">create_id = #{createId},</if>
+            <if test="updateId != null  ">update_id = #{updateId},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        where pk_id = #{pkId}
+    </update>
+
+    <delete id="deleteUsersById" parameterType="Long">
+        delete from sys_users where pk_id = #{pkId}
+    </delete>
+
+    <delete id="deleteUsersByIds" parameterType="String">
+        delete from sys_users where pk_id in
+        <foreach item="pkId" collection="array" open="(" separator="," close=")">
+            #{pkId}
+        </foreach>
+    </delete>
+
+</mapper>

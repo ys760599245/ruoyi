@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.wechats.mapper.StoreMapper">
+    
+    <resultMap type="com.ruoyi.wechats.domain.Store" id="StoreResult">
+        <result property="pkSid"    column="pk_sid"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="mark"    column="mark"    />
+        <result property="sName"    column="s_name"    />
+        <result property="address"    column="address"    />
+        <result property="createId"    column="create_id"    />
+        <result property="updateId"    column="update_id"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+	
+	<sql id="selectStoreVo">
+        select pk_sid, create_time, mark, s_name, address, create_id, update_id, update_time from sys_store
+    </sql>
+	
+    <select id="selectStoreList" parameterType="com.ruoyi.wechats.domain.Store" resultMap="StoreResult">
+        <include refid="selectStoreVo"/>
+        <where>  
+            <if test="pkSid != null "> and pk_sid = #{pkSid}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="mark != null "> and mark = #{mark}</if>
+             <if test="sName != null "> and s_name = #{sName}</if>
+             <if test="address != null  and address != '' "> and address = #{address}</if>
+             <if test="createId != null "> and create_id = #{createId}</if>
+             <if test="updateId != null "> and update_id = #{updateId}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectStoreById" parameterType="Long" resultMap="StoreResult">
+        <include refid="selectStoreVo"/>
+        where pk_sid = #{pkSid}
+    </select>
+        
+    <insert id="insertStore" parameterType="com.ruoyi.wechats.domain.Store" useGeneratedKeys="true" keyProperty="pkSid">
+        insert into sys_store
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="createTime != null  ">create_time,</if>
+			<if test="mark != null  ">mark,</if>
+			<if test="sName != null  ">s_name,</if>
+			<if test="address != null  and address != ''  ">address,</if>
+			<if test="createId != null  ">create_id,</if>
+			<if test="updateId != null  ">update_id,</if>
+			<if test="updateTime != null  ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="mark != null  ">#{mark},</if>
+			<if test="sName != null  ">#{sName},</if>
+			<if test="address != null  and address != ''  ">#{address},</if>
+			<if test="createId != null  ">#{createId},</if>
+			<if test="updateId != null  ">#{updateId},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateStore" parameterType="com.ruoyi.wechats.domain.Store">
+        update sys_store
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="mark != null  ">mark = #{mark},</if>
+            <if test="sName != null  ">s_name = #{sName},</if>
+            <if test="address != null  and address != ''  ">address = #{address},</if>
+            <if test="createId != null  ">create_id = #{createId},</if>
+            <if test="updateId != null  ">update_id = #{updateId},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        where pk_sid = #{pkSid}
+    </update>
+
+	<delete id="deleteStoreById" parameterType="Long">
+        delete from sys_store where pk_sid = #{pkSid}
+    </delete>
+	
+    <delete id="deleteStoreByIds" parameterType="String">
+        delete from sys_store where pk_sid in 
+        <foreach item="pkSid" collection="array" open="(" separator="," close=")">
+            #{pkSid}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.wechats.mapper.TypeMapper">
+    
+    <resultMap type="com.ruoyi.wechats.domain.Type" id="TypeResult">
+        <result property="pkTid"    column="pk_tid"    />
+        <result property="typeName"    column="type_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createId"    column="create_id"    />
+        <result property="updateId"    column="update_id"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+	
+	<sql id="selectTypeVo">
+        select pk_tid, type_name, create_time, create_id, update_id, update_time from sys_type
+    </sql>
+	
+    <select id="selectTypeList" parameterType="com.ruoyi.wechats.domain.Type" resultMap="TypeResult">
+        <include refid="selectTypeVo"/>
+        <where>  
+            <if test="pkTid != null "> and pk_tid = #{pkTid}</if>
+             <if test="typeName != null  and typeName != '' "> and type_name = #{typeName}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="createId != null "> and create_id = #{createId}</if>
+             <if test="updateId != null "> and update_id = #{updateId}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectTypeById" parameterType="Long" resultMap="TypeResult">
+        <include refid="selectTypeVo"/>
+        where pk_tid = #{pkTid}
+    </select>
+        
+    <insert id="insertType" parameterType="com.ruoyi.wechats.domain.Type" useGeneratedKeys="true" keyProperty="pkTid">
+        insert into sys_type
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="typeName != null  and typeName != ''  ">type_name,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="createId != null  ">create_id,</if>
+			<if test="updateId != null  ">update_id,</if>
+			<if test="updateTime != null  ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="typeName != null  and typeName != ''  ">#{typeName},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="createId != null  ">#{createId},</if>
+			<if test="updateId != null  ">#{updateId},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateType" parameterType="com.ruoyi.wechats.domain.Type">
+        update sys_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="typeName != null  and typeName != ''  ">type_name = #{typeName},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="createId != null  ">create_id = #{createId},</if>
+            <if test="updateId != null  ">update_id = #{updateId},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        where pk_tid = #{pkTid}
+    </update>
+
+	<delete id="deleteTypeById" parameterType="Long">
+        delete from sys_type where pk_tid = #{pkTid}
+    </delete>
+	
+    <delete id="deleteTypeByIds" parameterType="String">
+        delete from sys_type where pk_tid in 
+        <foreach item="pkTid" collection="array" open="(" separator="," close=")">
+            #{pkTid}
+        </foreach>
+    </delete>
+    
+</mapper>

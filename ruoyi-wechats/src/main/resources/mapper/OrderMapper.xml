@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.wechats.mapper.OrderMapper">
+    
+    <resultMap type="com.ruoyi.wechats.domain.Order" id="OrderResult">
+        <result property="pkOid"    column="pk_oid"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="fkUid"    column="fk_uid"    />
+        <result property="skillJson"    column="skill_json"    />
+        <result property="reserveTime"    column="reserve_time"    />
+        <result property="fkEid"    column="fk_eid"    />
+        <result property="totalPrice"    column="total_price"    />
+        <result property="createId"    column="create_id"    />
+        <result property="updateId"    column="update_id"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+	
+	<sql id="selectOrderVo">
+        select pk_oid, create_time, fk_uid, skill_json, reserve_time, fk_eid, total_price, create_id, update_id, update_time from sys_order
+    </sql>
+	
+    <select id="selectOrderList" parameterType="com.ruoyi.wechats.domain.Order" resultMap="OrderResult">
+        <include refid="selectOrderVo"/>
+        <where>  
+            <if test="pkOid != null "> and pk_oid = #{pkOid}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="fkUid != null "> and fk_uid = #{fkUid}</if>
+             <if test="skillJson != null  and skillJson != '' "> and skill_json = #{skillJson}</if>
+             <if test="reserveTime != null "> and reserve_time = #{reserveTime}</if>
+             <if test="fkEid != null "> and fk_eid = #{fkEid}</if>
+             <if test="totalPrice != null "> and total_price = #{totalPrice}</if>
+             <if test="createId != null "> and create_id = #{createId}</if>
+             <if test="updateId != null "> and update_id = #{updateId}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectOrderById" parameterType="Long" resultMap="OrderResult">
+        <include refid="selectOrderVo"/>
+        where pk_oid = #{pkOid}
+    </select>
+        
+    <insert id="insertOrder" parameterType="com.ruoyi.wechats.domain.Order" useGeneratedKeys="true" keyProperty="pkOid">
+        insert into sys_order
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="createTime != null  ">create_time,</if>
+			<if test="fkUid != null  ">fk_uid,</if>
+			<if test="skillJson != null  and skillJson != ''  ">skill_json,</if>
+			<if test="reserveTime != null  ">reserve_time,</if>
+			<if test="fkEid != null  ">fk_eid,</if>
+			<if test="totalPrice != null  ">total_price,</if>
+			<if test="createId != null  ">create_id,</if>
+			<if test="updateId != null  ">update_id,</if>
+			<if test="updateTime != null  ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="fkUid != null  ">#{fkUid},</if>
+			<if test="skillJson != null  and skillJson != ''  ">#{skillJson},</if>
+			<if test="reserveTime != null  ">#{reserveTime},</if>
+			<if test="fkEid != null  ">#{fkEid},</if>
+			<if test="totalPrice != null  ">#{totalPrice},</if>
+			<if test="createId != null  ">#{createId},</if>
+			<if test="updateId != null  ">#{updateId},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateOrder" parameterType="com.ruoyi.wechats.domain.Order">
+        update sys_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="fkUid != null  ">fk_uid = #{fkUid},</if>
+            <if test="skillJson != null  and skillJson != ''  ">skill_json = #{skillJson},</if>
+            <if test="reserveTime != null  ">reserve_time = #{reserveTime},</if>
+            <if test="fkEid != null  ">fk_eid = #{fkEid},</if>
+            <if test="totalPrice != null  ">total_price = #{totalPrice},</if>
+            <if test="createId != null  ">create_id = #{createId},</if>
+            <if test="updateId != null  ">update_id = #{updateId},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        where pk_oid = #{pkOid}
+    </update>
+
+	<delete id="deleteOrderById" parameterType="Long">
+        delete from sys_order where pk_oid = #{pkOid}
+    </delete>
+	
+    <delete id="deleteOrderByIds" parameterType="String">
+        delete from sys_order where pk_oid in 
+        <foreach item="pkOid" collection="array" open="(" separator="," close=")">
+            #{pkOid}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.wechats.mapper.EvaluationMapper">
+    
+    <resultMap type="com.ruoyi.wechats.domain.Evaluation" id="EvaluationResult">
+        <result property="pkEvId"    column="pk_ev_id"    />
+        <result property="mark"    column="mark"    />
+        <result property="fkOid"    column="fk_oid"    />
+        <result property="level"    column="level"    />
+        <result property="createId"    column="create_id"    />
+        <result property="updateId"    column="update_id"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+	
+	<sql id="selectEvaluationVo">
+        select pk_ev_id, mark, fk_oid, level, create_id, update_id, update_time, create_time from sys_evaluation
+    </sql>
+	
+    <select id="selectEvaluationList" parameterType="com.ruoyi.wechats.domain.Evaluation" resultMap="EvaluationResult">
+        <include refid="selectEvaluationVo"/>
+        <where>  
+            <if test="pkEvId != null "> and pk_ev_id = #{pkEvId}</if>
+             <if test="mark != null  and mark != '' "> and mark = #{mark}</if>
+             <if test="fkOid != null  and fkOid != '' "> and fk_oid = #{fkOid}</if>
+             <if test="level != null "> and level = #{level}</if>
+             <if test="createId != null "> and create_id = #{createId}</if>
+             <if test="updateId != null "> and update_id = #{updateId}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectEvaluationById" parameterType="Long" resultMap="EvaluationResult">
+        <include refid="selectEvaluationVo"/>
+        where pk_ev_id = #{pkEvId}
+    </select>
+        
+    <insert id="insertEvaluation" parameterType="com.ruoyi.wechats.domain.Evaluation" useGeneratedKeys="true" keyProperty="pkEvId">
+        insert into sys_evaluation
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="mark != null  and mark != ''  ">mark,</if>
+			<if test="fkOid != null  and fkOid != ''  ">fk_oid,</if>
+			<if test="level != null  ">level,</if>
+			<if test="createId != null  ">create_id,</if>
+			<if test="updateId != null  ">update_id,</if>
+			<if test="updateTime != null  ">update_time,</if>
+			<if test="createTime != null  ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="mark != null  and mark != ''  ">#{mark},</if>
+			<if test="fkOid != null  and fkOid != ''  ">#{fkOid},</if>
+			<if test="level != null  ">#{level},</if>
+			<if test="createId != null  ">#{createId},</if>
+			<if test="updateId != null  ">#{updateId},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateEvaluation" parameterType="com.ruoyi.wechats.domain.Evaluation">
+        update sys_evaluation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="mark != null  and mark != ''  ">mark = #{mark},</if>
+            <if test="fkOid != null  and fkOid != ''  ">fk_oid = #{fkOid},</if>
+            <if test="level != null  ">level = #{level},</if>
+            <if test="createId != null  ">create_id = #{createId},</if>
+            <if test="updateId != null  ">update_id = #{updateId},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+        </trim>
+        where pk_ev_id = #{pkEvId}
+    </update>
+
+	<delete id="deleteEvaluationById" parameterType="Long">
+        delete from sys_evaluation where pk_ev_id = #{pkEvId}
+    </delete>
+	
+    <delete id="deleteEvaluationByIds" parameterType="String">
+        delete from sys_evaluation where pk_ev_id in 
+        <foreach item="pkEvId" collection="array" open="(" separator="," close=")">
+            #{pkEvId}
+        </foreach>
+    </delete>
+    
+</mapper>
